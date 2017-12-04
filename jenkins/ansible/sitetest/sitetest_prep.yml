@@ -1,0 +1,196 @@
+---
+- hosts: appliance
+  remote_user: smeconfiguser
+  become: true
+  become_user: root
+  become_method: su
+  vars_prompt:
+    - name: "ansible_ssh_pass"
+      prompt: "Enter smeconfiguser password"
+      private: yes
+    - name: "ansible_become_pass"
+      prompt: "Enter root password"
+      private: yes
+
+  tasks:
+    - name: Disable Swapping for all devices
+      shell: sudo swapoff -a
+
+    - name: Stop iptables
+      service:
+        name: iptables
+        state: stopped
+
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+
+    - name: Create sftp directory
+      file:
+        path: /home/smeconfiguser/sftp
+        state: directory
+        owner: smeconfiguser
+        mode: 0755
+
+    - name: Insert zoho API key into config.in.php file
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="zoho_api_key"
+        line="        var $zoho_api_key = '392f8209a645648d82bb313561d77091';"
+        state=present
+
+    - name: Insert SMTP host into config.in.php file
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="emailsmtp_host"
+        line="        var $emailsmtp_host='smtp.google.com';"
+        state=present
+
+    - name: Insert SMTP login into config.in.php file
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="emailsmtp_login"
+        line="        var $emailsmtp_login='ssitetests@gmail.com';"
+        state=present
+
+    - name: Insert SMTP password into config.inc.php file
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="emailsmtp_password"
+        line="        var $emailsmtp_password='ssitetestsssitetests';"
+        state=present
+
+    - name: Insert Filebox host into config.inc.php file
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="filebox_host"
+        line="        var $filebox_host='imap.google.com';"
+        state=present
+
+    - name: Insert Filebox login into config.inc.php file
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="filebox_login"
+        line="        var $filebox_login='ssitetests@gmail.com';"
+        state=present
+
+    - name: Inser Filebox password into config.inc.php file
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="filebox_password"
+        line="        var $filebox_password='ssitetestsssitetests';"
+        state=present
+
+    - name: Insert License key into config.in.php file
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="apisettingskey"
+        line="        var $apisettingskey = '73ly-u1f02000-ry-ay-d20171231-o1000-nzim';"
+        state=present
+
+    - name: Enable real time refresh
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="disablerealtime"
+        line="        var $disablerealtime = 0;"
+        state=present
+
+    - name: Enable business groups
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="businessgroups"
+        line="        var $businessgroups = 1;"
+        state=present
+
+    - name: Enable Cifs provider
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="enablecifsprovider"
+        line="        var $enablecifsprovider = '1';"
+        state=present
+
+    - name: Configure FTP as default storage
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="default_storage_provider"
+        line="        var $default_storage_provider = 'FTPStorageProvider';"
+        insertafter="cloudedit_osx_download_link"
+        state=present
+
+    - name: Configure default storage login
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="default_storage_login"
+        line="        var $default_storage_login = 'v3:MzI6NWRhZTU5OTgzMjUzOTE3ZTY3NTM5ZGY4OTA3NTA4ZDAwNmViMGFjYTI2NDZjMDRhOGVmNzRjMzRlZjI3MjdkNA==';"
+        insertafter="default_storage_provider"
+        state=present
+
+    - name: Configure default storage password
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="default_storage_password"
+        line="        var $default_storage_password = 'v3:MTY6NTI2MjE0Yzk5ZGNiMmQ4YWM3MzZjMGJjNzlmYTlhZTM=';"
+        insertafter="default_storage_login"
+        state=present
+
+    - name: Configure FTP host
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="default_storage_host"
+        line="        var $default_storage_host = 'sftp://127.0.0.1';"
+        insertafter="default_storage_password"
+        state=present
+
+    - name: Configure default storage port
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="default_storage_port"
+        line="        var $default_storage_port = '22';"
+        insertafter="default_storage_host"
+        state=present
+
+    - name: Set FTP home path
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="default_storage_path"
+        line="        var $default_storage_path = 'v3:MzI6NTFmOTBkZTk2YWMzMDkwNDY5YWEyMzk3NjM0YjVkNDMwYmNmNjhjYzc0ZWY5MTdlNDM0MDUzYmVkYmMwMDRkMw==';"
+        insertafter="default_storage_port"
+        state=present
+
+    - name: Insert remaining default storage configuration into config.inc.php file
+      blockinfile:
+        path: /var/www/smestorage/public_html/config.inc.php
+        insertafter: "default_storage_path"
+        state: present
+        block: |
+          var $default_storage_token = '';
+          var $default_storage_additional = '';
+          var $default_storage_solr = '';
+          var $default_storage_delfiles = '';
+          var $default_storage_title = 'Default Storage';
+          var $default_storage_foldertitle = 'My Files';
+
+    - name: Enable FS provider
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="enablefsprovider"
+        line="        var $enablefsprovider = '1';"
+        insertafter="alwaysusehttps"
+        state=present
+
+    - name: Enable HPSS provider
+      lineinfile:
+        dest=/var/www/smestorage/public_html/config.inc.php
+        regexp="enablehpssprovider"
+        line="        var $enablehpssprovider = '1';"
+        insertafter="enablefsprovider"
+        state=present
+
+    - name: Run SQL statement to add providers to User package
+      shell: echo "update pa_packages set pa_providers='0,29,25,1,46,47,54,34,82,3,72,63,75,66,51,22,57,81,15,58,32,68,6,17,70,7,67,45,26,18,37,64,71,39,78,43,40,59,76,31,56,60,44,14,80,62,69,30,41,73,28,77,27,33,5,24,53,42,23,65,35,79,61,50,9,21,16' where pa_id=22;" | mysql -usmestore -pbesp5fyx smestorage
+
+    - name: Run SQL statement to add default storage providers table
+      shell: echo "insert into pr_providers (pr_id, pr_name, classname, pr_active, pr_isprovider, pr_forimport, pr_forexport, pr_code, pr_beta, pr_alpha, pr_supportedbackup, pr_fileslisttype) VALUES (0, 'Default Storage', 'DefaultStorageProvider', 'y', '1', '0', '0', 'default', 'n', 'n', 's3,mosso,gstorage,azure,ftp,webdav', '1');" | mysql -usmestore -pbesp5fyx smestorage
+
+    - name: Enable DropFolders
+      shell: echo "INSERT INTO us_extra (pa_oid, itemtype, itemid, whenget) VALUES (40, 'p', 22, '2012-02-22 19:04:33');" | mysql -usmestore -pbesp5fyx smestorage

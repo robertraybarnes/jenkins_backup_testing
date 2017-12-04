@@ -1,0 +1,24 @@
+---
+- hosts: test
+  remote_user: smeadmin
+  become: false
+  vars_prompt:
+    - name: appliance_ip
+      prompt: "What is the IP address of the appliance you would like to test?"
+      default: 10.0.0.49
+    - name: "ansible_ssh_pass"
+      prompt: "Enter smeadmin password"
+      private: yes
+  tasks:
+    - name: insert template configuration into config.rb file
+      template:
+        src: /var/lib/jenkins/ansible/sitetest/config_template.j2
+        dest: /home/smeadmin/robert/config.rb
+        force: yes
+
+    - name: Insert IP address into config.rb file
+      lineinfile:
+        dest="/home/smeadmin/robert/config.rb"
+        regexp="insert_appliance_ip_here"
+        line="$conf[:site_url] = '10.0.0.49'"
+        state=present

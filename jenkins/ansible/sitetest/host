@@ -1,0 +1,5 @@
+[appliance]
+appliance_jenkins ansible_host=192.168.145.148
+
+[test]
+test_vm ansible_host=109.251.62.4

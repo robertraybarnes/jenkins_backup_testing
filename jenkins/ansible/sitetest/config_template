@@ -1,0 +1,107 @@
+$conf = {}
+$conf[:run_mode] = 'gui' #gui or api
+$conf[:chromium] = false
+
+#$conf[:site_url] = 'dev-y-test.smestorage.com'
+#$conf[:site_url] = 'dev-y-preview.smestorage.com'
+#$conf[:site_url] = 'dev-y-preview2.smestorage.com'
+#$conf[:site_url] = 'dev-y-preview3.smestorage.com'
+#$conf[:site_url] = 'dev-i-test.smestorage.com'
+#$conf[:site_url] = 'dev-i.smestorage.com'
+#$conf[:site_url] = 'dev-r-test.smestorage.com'
+#$conf[:site_url] = 'dev-v.smestorage.com'
+
+#$conf[:site_url] = 'storagemadeeasy.com'
+#$conf[:site_url] = 'eu.storagemadeeasy.com'
+#$conf[:site_url] = 'dev.storagemadeeasy.com'
+#$conf[:site_url] = 'deveu.storagemadeeasy.com'
+#$conf[:site_url] = 'beta.storagemadeeasy.com'
+
+#$conf[:site_url] = 'test1.fileserverapp.com'
+#$conf[:site_url] = 'oneims.fileserverapp.com'
+#$conf[:site_url] = 'sme.myftp.org'
+#$conf[:site_url] = '109.251.62.4'
+#insert_appliance_ip_here
+
+#$conf[:tester_name] = 'Roman'
+$conf[:tester_name] = 'Robert'
+#$conf[:tester_name] = 'Stepan'
+#$conf[:tester_name] = 'Yura'
+#$conf[:tester_name] = 'ssitetests'
+
+#$conf[:tester_H] = {user: '', pass: ''}
+
+$conf[:appladmin] = {:user => 'appladmin', :pass => 'phet7hus'}
+$conf[:packages] = {:individual_lifetime_cloud => '16', :organisation_cloud_5 => '22', :organisation_cloud_10 => '23', :organisation_cloud_20 => '45'}
+
+$conf[:sleep_k] = 1
+$conf[:workers_count] = 5
+#$conf[:re_run] = 1
+$conf[:re_run] = {
+        'default' => 3,
+        'ts_doAddProvider' => 3,
+        'ts_doAddProvider_slow' => 3,
+        'ts_doAddProvider_move_copy_to_providers' => 1,
+#       'ts_...' => 1,
+}
+
+$conf[:skip_cloud_ftp] =        true
+$conf[:skip_cloud_ftps] =       true
+$conf[:skip_cloud_sftp] =       true
+$conf[:skip_cloud_webdav] =     true
+$conf[:skip_cloud_s3] =         true
+
+
+$conf[:appliance] =
+                        ($conf[:site_url] =~ /smefilefabric.com/) ||
+                        ($conf[:site_url] =~ /innodb.smestorage.com/) ||
+                        ($conf[:site_url] =~ /v10to1705.smestorage.com/) ||
+                        ($conf[:site_url] =~ /fmt-innosme01.smestorage.com/) ||
+                        true
+
+$conf[:turn_off_popups] = true
+$conf[:puts_api_query] = false
+$conf[:puts_xml_response] = false
+$conf[:firebug] = false
+$conf[:xvfb] = false
+
+#$conf[:development] = {
+#       :resize_browser => true
+#}
+
+$conf[:send_report_log_to_filebox] = true
+$conf[:filebox] = 'filebox.reportlogs@eu.storagemadeeasy.com'
+$conf[:send_via_email] = 'ssitetests@gmail.com'
+$conf[:send_via_pass] = 'ssitetestsssitetests'
+
+#notification_emails = 'stepan@storagemadeeasy.com, vanja@storagemadeeasy.com, roman@storagemadeeasy.com, kamran@storagemadeeasy.com, jim@storagemadeeasy.com, ihor@storagemadeeasy.com'
+notification_emails = 'stepan@storagemadeeasy.com'
+developers_notification_emails = 'stepan@storagemadeeasy.com'
+$conf[:email_notification_H] = {
+        'gmail' => {'from' => 'ssitetests@gmail.com', 'pass' => 'ssitetestsssitetests'},
+
+        'ts_doAddProvider' => {
+                'email_notification' => {
+#                       'to' => developers_notification_emails
+                        'to' => notification_emails
+                }
+        },
+        'ts_doAddProvider_slow' => {
+                'email_notification' => {
+#                       'to' => developers_notification_emails
+                        'to' => notification_emails
+                }
+        },
+        'ts_doAddProvider_move_copy_to_providers' => {
+                'email_notification' => {
+#                       'to' => developers_notification_emails
+                        'to' => notification_emails
+                }
+        },
+        'ts_doAddProvider_trash' => {
+                'email_notification' => {
+#                       'to' => developers_notification_emails
+                        'to' => notification_emails
+                }
+        },
+}
