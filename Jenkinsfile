@@ -1,8 +1,9 @@
 pipeline {
   agent any
-  node {
-        checkout([$class: 'GitSCM', branches: [[name: '1803.00']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.com/SMEStorage/devops'], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1a29df34-35c4-44f3-8017-0e854fac0963', url: 'git@github.com:SMEStorage/devops.git']]])
+      node {
+        checkout({ git branch: '1803.00', credentialsId: '1a29df34-35c4-44f3-8017-0e854fac0963', url: 'git@github.com:SMEStorage/devops.git'})
     }
+
   stages {
     stage('esxi_provision') {
       parallel {
