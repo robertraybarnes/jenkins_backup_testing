@@ -1,11 +1,12 @@
 pipeline {
   agent any
-  node () {
+  stages {
+	node () {
 
 	stage ('scm - Checkout') {
  	 checkout([$class: 'GitSCM', branches: [[name: '1803.00']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1a29df34-35c4-44f3-8017-0e854fac0963', url: 'https://github.com/SMEStorage/devops']]]) 
 	}
-  stages {
+  
     stage('esxi_provision') {
       parallel {
         stage('esxi_provision') {
