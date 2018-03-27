@@ -1,10 +1,11 @@
 pipeline {
   agent any
-      node {
-        checkout({ git branch: '1803.00', credentialsId: '1a29df34-35c4-44f3-8017-0e854fac0963', url: 'git@github.com:SMEStorage/devops.git'})
-    }
-
   stages {
+      stage('git checkout') {
+            node {
+                checkout({ git branch: '1803.00', credentialsId: '1a29df34-35c4-44f3-8017-0e854fac0963', url: 'git@github.com:SMEStorage/devops.git'})
+            }
+        }
     stage('esxi_provision') {
       parallel {
         stage('esxi_provision') {
